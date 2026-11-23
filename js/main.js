@@ -148,13 +148,20 @@
         if (currentImages.length <= 1 || isAnimating) return;
 
         isAnimating = true;
-        const content = document.querySelector('.lightbox-content');
         const mainDiv = document.querySelector('.lightbox-main');
         const previewDiv = document.querySelector('.lightbox-preview');
 
         // Get actual main image width for accurate slide distance
         const mainWidth = lightboxImage ? lightboxImage.offsetWidth : 0;
         const slideDistance = mainWidth + 40; // main width + gap
+
+        // Calculate next indices
+        const nextIndex = (currentIndex + 1) % currentImages.length;
+        const nextNextIndex = (currentIndex + 2) % currentImages.length;
+
+        // Preload the next-next image during animation
+        const preloadImg = new Image();
+        preloadImg.src = currentImages[nextNextIndex];
 
         // Apply dynamic slide transforms
         if (mainDiv) {
@@ -169,7 +176,7 @@
         // After slide completes
         setTimeout(() => {
             // Update index
-            currentIndex = (currentIndex + 1) % currentImages.length;
+            currentIndex = nextIndex;
 
             // Disable transitions temporarily
             if (mainDiv) {
@@ -183,8 +190,14 @@
                 previewDiv.style.opacity = '';
             }
 
-            // Update image sources
-            updateDisplay();
+            // Set main image to what preview was showing (already loaded)
+            if (lightboxImage && lightboxNextImage) {
+                lightboxImage.src = currentImages[currentIndex];
+                lightboxImage.alt = `${getProjectName(currentProject)} - Imagem ${currentIndex + 1}`;
+                // Set preview to preloaded next-next image
+                lightboxNextImage.src = currentImages[nextNextIndex];
+                lightboxNextImage.alt = `${getProjectName(currentProject)} - Imagem ${nextNextIndex + 1}`;
+            }
 
             // Re-enable transitions after a frame
             requestAnimationFrame(() => {
