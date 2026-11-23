@@ -148,47 +148,85 @@
         if (currentImages.length <= 1 || isAnimating) return;
 
         isAnimating = true;
+        const content = document.querySelector('.lightbox-content');
+        const mainDiv = document.querySelector('.lightbox-main');
+        const previewDiv = document.querySelector('.lightbox-preview');
 
-        // Add transition class to main image
-        if (lightboxMain) {
-            lightboxMain.classList.add('transitioning');
+        // Get actual main image width for accurate slide distance
+        const mainWidth = lightboxImage ? lightboxImage.offsetWidth : 0;
+        const slideDistance = mainWidth + 40; // main width + gap
+
+        // Apply dynamic slide transforms
+        if (mainDiv) {
+            mainDiv.style.transform = `translateX(-${mainWidth}px)`;
+            mainDiv.style.opacity = '0';
+        }
+        if (previewDiv) {
+            previewDiv.style.transform = `translateX(-${slideDistance}px)`;
+            previewDiv.style.opacity = '1';
         }
 
-        // After fade out, update images
+        // After slide completes
         setTimeout(() => {
+            // Update index
             currentIndex = (currentIndex + 1) % currentImages.length;
+
+            // Disable transitions temporarily
+            if (mainDiv) {
+                mainDiv.style.transition = 'none';
+                mainDiv.style.transform = '';
+                mainDiv.style.opacity = '';
+            }
+            if (previewDiv) {
+                previewDiv.style.transition = 'none';
+                previewDiv.style.transform = '';
+                previewDiv.style.opacity = '';
+            }
+
+            // Update image sources
             updateDisplay();
 
-            // Remove transition class after update
-            setTimeout(() => {
-                if (lightboxMain) {
-                    lightboxMain.classList.remove('transitioning');
-                }
-                isAnimating = false;
-            }, 50);
-        }, 300);
+            // Re-enable transitions after a frame
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (mainDiv) mainDiv.style.transition = '';
+                    if (previewDiv) previewDiv.style.transition = '';
+                    isAnimating = false;
+                });
+            });
+        }, 500);
     }
 
-    // Go to previous image with slide animation
+    // Go to previous image with fade animation
     function goToPrev() {
         if (currentImages.length <= 1 || isAnimating) return;
 
         isAnimating = true;
+        const mainDiv = document.querySelector('.lightbox-main');
+        const previewDiv = document.querySelector('.lightbox-preview');
 
-        if (lightboxMain) {
-            lightboxMain.classList.add('transitioning');
-        }
+        // Fade out
+        if (mainDiv) mainDiv.style.opacity = '0';
+        if (previewDiv) previewDiv.style.opacity = '0';
 
         setTimeout(() => {
             currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+
+            if (mainDiv) mainDiv.style.transition = 'none';
+            if (previewDiv) previewDiv.style.transition = 'none';
+
             updateDisplay();
 
-            setTimeout(() => {
-                if (lightboxMain) {
-                    lightboxMain.classList.remove('transitioning');
-                }
-                isAnimating = false;
-            }, 50);
+            if (mainDiv) mainDiv.style.opacity = '';
+            if (previewDiv) previewDiv.style.opacity = '';
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (mainDiv) mainDiv.style.transition = '';
+                    if (previewDiv) previewDiv.style.transition = '';
+                    isAnimating = false;
+                });
+            });
         }, 300);
     }
 
@@ -232,10 +270,36 @@
         }
     }
 
+    // Lazy load high-quality thumbnails (01.jpg instead of cover.jpg)
+    function lazyLoadThumbnails() {
+        const cards = document.querySelectorAll('.project-card');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const projectId = card.dataset.project;
+                    const thumb = card.querySelector('.project-thumb');
+                    if (thumb && projectId) {
+                        // Load high-quality 01.jpg
+                        thumb.style.backgroundImage = `url('images/projects/${projectId}/01.jpg')`;
+                    }
+                    observer.unobserve(card);
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        cards.forEach(card => observer.observe(card));
+    }
+
     // Run on DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            lazyLoadThumbnails();
+        });
     } else {
         init();
+        lazyLoadThumbnails();
     }
 })();
