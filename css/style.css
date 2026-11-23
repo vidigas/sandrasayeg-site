@@ -103,6 +103,11 @@ img {
     min-height: 100vh;
 }
 
+.hero-link {
+    display: block;
+    cursor: pointer;
+}
+
 .hero-image {
     width: 100%;
     height: calc(100vh - 160px);
