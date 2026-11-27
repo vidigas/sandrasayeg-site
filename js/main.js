@@ -44,6 +44,7 @@
     const lightboxPreview = document.getElementById('lightbox-preview');
     const lightboxMain = document.querySelector('.lightbox-main');
     const closeBtn = document.querySelector('.lightbox-close');
+    const prevBtn = document.querySelector('.lightbox-prev');
     const nextBtn = document.querySelector('.lightbox-next');
 
     // Initialize
@@ -57,6 +58,7 @@
 
         // Lightbox controls
         closeBtn?.addEventListener('click', closeLightbox);
+        prevBtn?.addEventListener('click', goToPrev);
         nextBtn?.addEventListener('click', goToNext);
         lightboxPreview?.addEventListener('click', goToNext);
 
@@ -283,6 +285,48 @@
         }
     }
 
+    // Hero Slideshow
+    const HERO_IMAGE_COUNT = 5;
+    const HERO_INTERVAL = 5000; // 5 seconds between slides
+    let heroIndex = 0;
+    let heroInterval = null;
+
+    function initHeroSlideshow() {
+        const heroImage = document.querySelector('.hero-image');
+        if (!heroImage) return;
+
+        // Create second layer for crossfade
+        const heroContainer = heroImage.parentElement;
+        const heroImageNext = document.createElement('div');
+        heroImageNext.className = 'hero-image hero-image-next';
+        heroContainer.appendChild(heroImageNext);
+
+        // Preload all images
+        for (let i = 1; i <= HERO_IMAGE_COUNT; i++) {
+            const img = new Image();
+            img.src = `images/hero/${i.toString().padStart(2, '0')}.jpg`;
+        }
+
+        // Start slideshow
+        heroInterval = setInterval(() => {
+            heroIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
+            const nextNum = (heroIndex + 1).toString().padStart(2, '0');
+            const nextSrc = `images/hero/${nextNum}.jpg`;
+
+            // Set next image on the back layer
+            heroImageNext.style.backgroundImage = `url('${nextSrc}')`;
+
+            // Fade out current image to reveal next
+            heroImage.classList.add('fading');
+
+            // After transition, swap images
+            setTimeout(() => {
+                heroImage.style.backgroundImage = `url('${nextSrc}')`;
+                heroImage.classList.remove('fading');
+            }, 1000);
+        }, HERO_INTERVAL);
+    }
+
     // Lazy load high-quality thumbnails (01.jpg instead of cover.jpg)
     function lazyLoadThumbnails() {
         const cards = document.querySelectorAll('.project-card');
@@ -310,9 +354,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             init();
             lazyLoadThumbnails();
+            initHeroSlideshow();
         });
     } else {
         init();
         lazyLoadThumbnails();
+        initHeroSlideshow();
     }
 })();
