@@ -143,7 +143,7 @@ img {
 
 /* Projects Grid */
 .projects-container {
-    padding-top: 100px;
+    padding-top: 120px;
     padding-left: 40px;
     padding-right: 40px;
     padding-bottom: 40px;
@@ -216,7 +216,7 @@ img {
 .lightbox {
     display: none;
     position: fixed;
-    top: 100px;
+    top: 140px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -253,7 +253,7 @@ img {
 .lightbox-controls {
     display: none;
     position: fixed;
-    top: 110px;
+    top: 32px;
     right: 40px;
     flex-direction: row;
     align-items: center;
@@ -363,7 +363,7 @@ img {
 /* Content area - images side by side, overflow hidden on right */
 .lightbox-content {
     position: absolute;
-    top: 160px;
+    top: 20px;
     left: 40px;
     right: 0;
     bottom: 20px;
@@ -379,7 +379,7 @@ img {
 }
 
 .lightbox-main img {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 180px);
     width: auto;
     display: block;
     object-fit: contain;
@@ -398,7 +398,7 @@ img {
 }
 
 .lightbox-preview img {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 180px);
     width: auto;
     display: block;
     object-fit: contain;
@@ -480,7 +480,7 @@ img {
     .lightbox-content {
         left: 30px;
         gap: 30px;
-        top: 160px;
+        top: 20px;
     }
 
     .lightbox-controls {
@@ -535,12 +535,12 @@ img {
     }
 
     .lightbox-controls {
-        top: 95px;
+        top: 24px;
         right: 24px;
     }
 
     .lightbox-content {
-        top: 140px;
+        top: 20px;
         left: 24px;
         gap: 20px;
     }
@@ -581,7 +581,7 @@ img {
 
     /* Mobile Lightbox */
     .lightbox {
-        top: 100px;
+        top: 120px;
     }
 
     .lightbox-header {
@@ -596,13 +596,13 @@ img {
     }
 
     .lightbox-controls {
-        top: 70px;
+        top: 16px;
         right: 20px;
         gap: 20px;
     }
 
     .lightbox-content {
-        top: 100px;
+        top: 20px;
         left: 20px;
         right: 20px;
         bottom: 100px;
