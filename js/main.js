@@ -328,10 +328,14 @@
             const preloadIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
             preloadImage(preloadIndex);
 
-            // After transition, swap images
+            // After transition, swap images and restart zoom animation
             setTimeout(() => {
                 heroImage.style.backgroundImage = `url('${nextSrc}')`;
                 heroImage.classList.remove('fading');
+                // Restart zoom animation
+                heroImage.style.animation = 'none';
+                heroImage.offsetHeight; // Trigger reflow
+                heroImage.style.animation = '';
             }, 1000);
         }, HERO_INTERVAL);
     }

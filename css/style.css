@@ -107,6 +107,7 @@ img {
     display: block;
     cursor: pointer;
     position: relative;
+    overflow: hidden;
 }
 
 .hero-image {
@@ -116,6 +117,7 @@ img {
     background-position: center;
     background-repeat: no-repeat;
     transition: opacity 1s ease;
+    animation: hero-zoom 6s ease-out forwards;
 }
 
 .hero-image.fading {
@@ -127,6 +129,16 @@ img {
     top: 0;
     left: 0;
     z-index: -1;
+    animation: none;
+}
+
+@keyframes hero-zoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
 }
 
 /* Projects Grid */
