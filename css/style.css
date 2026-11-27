@@ -64,6 +64,7 @@ img {
     letter-spacing: 0.05em;
     border-bottom: 2px solid currentColor;
     padding-bottom: 6px;
+    line-height: 1;
 }
 
 .logo-subtitle {
@@ -84,6 +85,9 @@ img {
     font-weight: 400;
     letter-spacing: 0.02em;
     transition: opacity 0.2s ease;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
 }
 
 .nav a:hover {
