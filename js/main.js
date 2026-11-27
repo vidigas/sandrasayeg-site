@@ -301,23 +301,32 @@
         heroImageNext.className = 'hero-image hero-image-next';
         heroContainer.appendChild(heroImageNext);
 
-        // Preload all images
-        for (let i = 1; i <= HERO_IMAGE_COUNT; i++) {
+        // Helper to get image path
+        const getHeroPath = (index) => `images/hero/${(index + 1).toString().padStart(2, '0')}.jpg`;
+
+        // Preload only next image (current is already loaded via HTML)
+        const preloadImage = (index) => {
             const img = new Image();
-            img.src = `images/hero/${i.toString().padStart(2, '0')}.jpg`;
-        }
+            img.src = getHeroPath(index);
+        };
+
+        // Preload second image only
+        preloadImage(1);
 
         // Start slideshow
         heroInterval = setInterval(() => {
             heroIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
-            const nextNum = (heroIndex + 1).toString().padStart(2, '0');
-            const nextSrc = `images/hero/${nextNum}.jpg`;
+            const nextSrc = getHeroPath(heroIndex);
 
             // Set next image on the back layer
             heroImageNext.style.backgroundImage = `url('${nextSrc}')`;
 
             // Fade out current image to reveal next
             heroImage.classList.add('fading');
+
+            // Preload the image after next
+            const preloadIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
+            preloadImage(preloadIndex);
 
             // After transition, swap images
             setTimeout(() => {
@@ -327,7 +336,7 @@
         }, HERO_INTERVAL);
     }
 
-    // Lazy load high-quality thumbnails (01.jpg instead of cover.jpg)
+    // Lazy load thumbnails when visible
     function lazyLoadThumbnails() {
         const cards = document.querySelectorAll('.project-card');
 
@@ -338,8 +347,7 @@
                     const projectId = card.dataset.project;
                     const thumb = card.querySelector('.project-thumb');
                     if (thumb && projectId) {
-                        // Load high-quality 01.jpg
-                        thumb.style.backgroundImage = `url('images/projects/${projectId}/01.jpg')`;
+                        thumb.style.backgroundImage = `url('images/projects/${projectId}/cover.jpg')`;
                     }
                     observer.unobserve(card);
                 }
