@@ -224,6 +224,7 @@ img {
 
 .lightbox.active {
     display: block;
+    z-index: 150;
 }
 
 /* Title - centered in header row (outside lightbox for z-index) */
