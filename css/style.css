@@ -234,33 +234,23 @@ img {
     letter-spacing: 0.02em;
 }
 
-/* Close button - fixed top right */
-.lightbox-close {
+/* Controls - in gap between header and images, right aligned */
+.lightbox-controls {
     display: none;
     position: fixed;
-    top: 32px;
+    top: 110px;
     right: 40px;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
     z-index: 200;
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 0;
-    font-size: 0;
-    color: transparent;
-    width: 28px;
-    height: 28px;
 }
 
-.lightbox.active .lightbox-close {
-    display: block;
+.lightbox.active .lightbox-controls {
+    display: flex;
 }
 
-.lightbox-close:hover {
-    opacity: 0.5;
-}
-
-/* Navigation buttons */
+.lightbox-close,
 .lightbox-prev,
 .lightbox-next {
     background: none;
@@ -273,9 +263,15 @@ img {
     color: transparent;
 }
 
+.lightbox-close:hover,
 .lightbox-prev:hover,
 .lightbox-next:hover {
     opacity: 0.5;
+}
+
+.lightbox-close {
+    width: 28px;
+    height: 28px;
 }
 
 .lightbox-close::before,
@@ -397,17 +393,6 @@ img {
     display: none;
 }
 
-/* Navigation - between main and preview */
-.lightbox-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-    flex-shrink: 0;
-    padding-top: 0;
-}
-
 /* Slide animation */
 .lightbox-main {
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
@@ -483,7 +468,7 @@ img {
         top: 160px;
     }
 
-    .lightbox-close {
+    .lightbox-controls {
         right: 30px;
     }
 
@@ -534,8 +519,8 @@ img {
         top: 28px;
     }
 
-    .lightbox-close {
-        top: 28px;
+    .lightbox-controls {
+        top: 95px;
         right: 24px;
     }
 
@@ -591,16 +576,9 @@ img {
         font-size: 18px;
     }
 
-    .lightbox-close {
-        top: 20px;
+    .lightbox-controls {
+        top: 70px;
         right: 20px;
-    }
-
-    .lightbox-nav {
-        position: fixed;
-        bottom: 60px;
-        right: 20px;
-        flex-direction: row;
         gap: 20px;
     }
 
