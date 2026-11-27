@@ -295,46 +295,61 @@
         const heroImage = document.querySelector('.hero-image');
         if (!heroImage) return;
 
-        // Create second layer for crossfade
         const heroContainer = heroImage.parentElement;
+
+        // Create slider wrapper
+        const slider = document.createElement('div');
+        slider.className = 'hero-slider';
+
+        // Move current image into slider
+        heroContainer.appendChild(slider);
+        slider.appendChild(heroImage);
+
+        // Create next image element
         const heroImageNext = document.createElement('div');
-        heroImageNext.className = 'hero-image hero-image-next';
-        heroContainer.appendChild(heroImageNext);
+        heroImageNext.className = 'hero-image';
+        slider.appendChild(heroImageNext);
 
         // Helper to get image path
         const getHeroPath = (index) => `images/hero/${(index + 1).toString().padStart(2, '0')}.jpg`;
 
-        // Preload only next image (current is already loaded via HTML)
+        // Preload image
         const preloadImage = (index) => {
             const img = new Image();
             img.src = getHeroPath(index);
+            return img;
         };
 
-        // Preload second image only
-        preloadImage(1);
+        // Preload and set next image
+        const nextIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
+        heroImageNext.style.backgroundImage = `url('${getHeroPath(nextIndex)}')`;
+        preloadImage(nextIndex);
 
         // Start slideshow
         heroInterval = setInterval(() => {
             heroIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
-            const nextSrc = getHeroPath(heroIndex);
+            const upcomingIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
 
-            // Set next image on the back layer
-            heroImageNext.style.backgroundImage = `url('${nextSrc}')`;
+            // Preload upcoming image
+            preloadImage(upcomingIndex);
 
-            // Fade out current image to reveal next
-            heroImage.classList.add('fading');
+            // Slide left
+            slider.classList.add('sliding');
 
-            // Preload the image after next
-            const preloadIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
-            preloadImage(preloadIndex);
-
-            // After transition, swap images and restart zoom animation
+            // After slide transition
             setTimeout(() => {
-                heroImage.style.backgroundImage = `url('${nextSrc}')`;
-                heroImage.classList.remove('fading');
-                // Restart zoom animation
+                // Update current image to what was next
+                heroImage.style.backgroundImage = heroImageNext.style.backgroundImage;
+
+                // Reset slider position instantly
+                slider.classList.remove('sliding');
+
+                // Set new next image
+                heroImageNext.style.backgroundImage = `url('${getHeroPath(upcomingIndex)}')`;
+
+                // Restart zoom animation on current
                 heroImage.style.animation = 'none';
-                heroImage.offsetHeight; // Trigger reflow
+                heroImage.offsetHeight;
                 heroImage.style.animation = '';
             }, 1000);
         }, HERO_INTERVAL);

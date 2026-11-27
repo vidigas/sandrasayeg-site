@@ -114,26 +114,25 @@ img {
     overflow: hidden;
 }
 
+.hero-slider {
+    display: flex;
+    width: 200%;
+    transition: none;
+}
+
+.hero-slider.sliding {
+    transition: transform 1s ease-in-out;
+    transform: translateX(-50%);
+}
+
 .hero-image {
-    width: 100%;
+    width: 50%;
+    flex-shrink: 0;
     height: calc(100vh - 160px);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: opacity 1s ease;
     animation: hero-zoom 6s ease-out forwards;
-}
-
-.hero-image.fading {
-    opacity: 0;
-}
-
-.hero-image-next {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    animation: none;
 }
 
 @keyframes hero-zoom {
