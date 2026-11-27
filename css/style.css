@@ -201,7 +201,7 @@ img {
 .lightbox {
     display: none;
     position: fixed;
-    top: 0;
+    top: 100px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -211,7 +211,6 @@ img {
 
 .lightbox.active {
     display: block;
-    z-index: 150;
 }
 
 /* Title - centered in header row (outside lightbox for z-index) */
@@ -512,7 +511,7 @@ img {
     }
 
     .lightbox {
-        padding-top: 80px;
+        top: 70px;
     }
 
     .lightbox-header {
@@ -565,6 +564,10 @@ img {
     }
 
     /* Mobile Lightbox */
+    .lightbox {
+        top: 100px;
+    }
+
     .lightbox-header {
         top: auto;
         bottom: 20px;
