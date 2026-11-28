@@ -62,8 +62,8 @@ img {
     font-size: 35px;
     font-weight: 400;
     letter-spacing: 0.05em;
-    border-bottom: 2px solid currentColor;
-    padding-bottom: 6px;
+    border-bottom: 0.06em solid currentColor;
+    padding-bottom: 0.15em;
     line-height: 1;
 }
 
@@ -82,7 +82,7 @@ img {
 
 .nav a {
     font-size: 35px;
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: 0.02em;
     transition: opacity 0.2s ease;
     line-height: 1;
@@ -95,7 +95,7 @@ img {
 }
 
 .nav a.active {
-    font-weight: 700;
+    font-weight: 600;
 }
 
 /* Hero Section (Homepage) */
@@ -252,11 +252,11 @@ img {
     letter-spacing: 0.02em;
 }
 
-/* Controls - below nav, right aligned */
+/* Controls - aligned with arquitetura line, right aligned */
 .lightbox-controls {
     display: none;
     position: fixed;
-    top: 85px;
+    top: 75px;
     right: 40px;
     flex-direction: row;
     align-items: center;
