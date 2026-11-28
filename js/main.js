@@ -313,25 +313,47 @@
         // Helper to get image path
         const getHeroPath = (index) => `images/hero/${(index + 1).toString().padStart(2, '0')}.jpg`;
 
-        // Preload image
-        const preloadImage = (index) => {
-            const img = new Image();
-            img.src = getHeroPath(index);
-            return img;
+        // Preload image and return promise
+        const preloadImage = (src) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(src);
+                img.onerror = () => resolve(src);
+                img.src = src;
+            });
         };
 
-        // Preload and set next image
-        const nextIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
-        heroImageNext.style.backgroundImage = `url('${getHeroPath(nextIndex)}')`;
-        preloadImage(nextIndex);
+        // Track preloaded images
+        const preloaded = new Set();
+        let nextNextSrc = null;
+
+        // Preload and set next image immediately
+        const nextSrc = getHeroPath(1);
+        preloadImage(nextSrc).then(() => {
+            heroImageNext.style.backgroundImage = `url('${nextSrc}')`;
+            preloaded.add(nextSrc);
+        });
+
+        // Preload next-next image immediately too
+        nextNextSrc = getHeroPath(2);
+        preloadImage(nextNextSrc).then(() => {
+            preloaded.add(nextNextSrc);
+        });
 
         // Start slideshow
         heroInterval = setInterval(() => {
             heroIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
             const upcomingIndex = (heroIndex + 1) % HERO_IMAGE_COUNT;
+            const futureIndex = (heroIndex + 2) % HERO_IMAGE_COUNT;
+            const upcomingSrc = getHeroPath(upcomingIndex);
+            const futureSrc = getHeroPath(futureIndex);
 
-            // Preload upcoming image
-            preloadImage(upcomingIndex);
+            // Start preloading future image now (2 slides ahead)
+            if (!preloaded.has(futureSrc)) {
+                preloadImage(futureSrc).then(() => {
+                    preloaded.add(futureSrc);
+                });
+            }
 
             // Slide left
             slider.classList.add('sliding');
@@ -344,8 +366,8 @@
                 // Reset slider position instantly
                 slider.classList.remove('sliding');
 
-                // Set new next image
-                heroImageNext.style.backgroundImage = `url('${getHeroPath(upcomingIndex)}')`;
+                // Set new next image (should be preloaded already)
+                heroImageNext.style.backgroundImage = `url('${upcomingSrc}')`;
 
                 // Restart zoom animation on current
                 heroImage.style.animation = 'none';
